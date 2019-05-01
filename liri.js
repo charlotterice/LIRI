@@ -1,4 +1,4 @@
-var dotenv = require("dotenv").config();
+require("dotenv").config();
 var keys = require("./keys.js");
 var fs = require("fs");
 var Spotify = require("node-spotify-api");
@@ -6,6 +6,15 @@ var request = require("request");
 var inquirer = require("inquirer");
 var spotify = new Spotify(keys.spotify);
 
+var userChoice = process.argv[2];
+var searchParameter = process.argv[3];
+
+function userInput (userOption, inputParameter){
+    switch(userOption){
+        case "concert-this":
+        
+    }
+}
 function getSpotify(song) {
   spotify.search({ type: "track", query: song }, function(err, data) {
     if (err) {
@@ -70,12 +79,22 @@ inquirer
       type: "input",
       message: "What movie would you like to find information about?",
       name: "movieChoice"
-    }
+    },
+    {
+        type: "input",
+        message: "What band would you like to find information about?",
+        name: "bandChoice"
+      }
   ])
   .then(function(inquirerResponse) {
     if (inquirerResponse.songChoice) {
       getSpotify();
     } else if (inquirerResponse.movieChoice) {
       getMovie();
+    }else {
+     getConcert();
     }
   });
+
+
+  userInput(userChoice,searchParameter);
