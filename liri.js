@@ -33,14 +33,35 @@ function getMovie(movie){
     });
 }
 
-function getConcert(concert){
-    var bandsInTown = 
-}
+// function getConcert(concert){
+//     var bandsInTown = 
+// }
 inquirer
 .prompt([
-    {
-    type:"input",
-}
+        {
+            type: "list",
+            message: "Which would you like to search?",
+            choices: ["Songs", "Movies", "Concerts"],
+            name: "choices"
+          },
+          {
+            type: "input",
+            message: "What song would you like to find information about?",
+            name: "songChoice"
+          },
+          {
+            type: "input",
+            message: "What movie would you like to find information about?",
+            name: "movieChoice"
+          },
+
 ])
+.then(function(inquirerResponse){
+    if(inquirerResponse.songChoice){
+        getSpotify();
+    } else if (inquirerResponse.movieChoice){
+        getMovie();
+    }
+});
 
 
