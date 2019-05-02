@@ -9,16 +9,16 @@ var spotify = new Spotify(keys.spotify);
 var userChoice = process.argv[2];
 var searchParameter = process.argv[3];
 
-function userInput (userOption, inputParameter){
-    switch(userOption){
-        case "concert-this":
-        
-    }
+function userInput(userOption, inputParameter) {
+  switch (userOption) {
+    case "concert-this":
+  }
 }
 function getSpotify(song) {
   spotify.search({ type: "track", query: song }, function(err, data) {
     if (err) {
       console.log("Error: " + err);
+      return;
     } else {
       output = "==============LIRI RESULTS===================";
       song +
@@ -53,48 +53,54 @@ function getMovie(movie) {
   });
 }
 
-function getConcert(bandQuery){
-    var bandsInTown ="https://rest.bandsintown.com/artists/" + bandQuery + "/events?app_id=codingbootcamp#";
-    request(bandInTown, function (err,res,body){
-        if(!err && res.statusCode ===200){
-            var concert = JSON.parse(body);
-            console.log(concert[0].venue.city + concert[0].venue.country)
-    }
-    }
-    )};
-inquirer
-  .prompt([
-    {
-      type: "list",
-      message: "Which would you like to search?",
-      choices: ["Songs", "Movies", "Concerts"],
-      name: "choices"
-    },
-    {
-      type: "input",
-      message: "What song would you like to find information about?",
-      name: "songChoice"
-    },
-    {
-      type: "input",
-      message: "What movie would you like to find information about?",
-      name: "movieChoice"
-    },
-    {
-        type: "input",
-        message: "What band would you like to find information about?",
-        name: "bandChoice"
-      }
-  ])
-  .then(function(inquirerResponse) {
-    if (inquirerResponse.songChoice) {
-      getSpotify();
-    } else if (inquirerResponse.movieChoice) {
-      getMovie();
-    }else {
-     getConcert();
+function getConcert(bandQuery) {
+  var bandsInTown =
+    "https://rest.bandsintown.com/artists/" +
+    bandQuery +
+    "/events?app_id=codingbootcamp#";
+  request(bandInTown, function(err, res, body) {
+    if (!err && res.statusCode === 200) {
+      var concert = JSON.parse(body);
+      console.log(concert[0].venue.city + concert[0].venue.country);
     }
   });
+}
+function doWhatItSays() {
+  fs.readFile("random.txt", "utf-8", function(error, data) {
+    getSpotify(data);
+  });
+}
+var options = [
+  {
+    type: "list",
+    message: "Which would you like to search?",
+    choices: ["Songs", "Movies", "Concerts"],
+    name: "choices"
+  },
+  {
+    type: "input",
+    message: "What song would you like to find information about?",
+    name: "songChoice"
+  },
+  {
+    type: "input",
+    message: "What movie would you like to find information about?",
+    name: "movieChoice"
+  },
+  {
+    type: "input",
+    message: "What band would you like to find information about?",
+    name: "bandChoice"
+  }
+];
+inquirer.prompt([]).then(function(inquirerResponse) {
+  if (inquirerResponse.songChoice) {
+    getSpotify();
+  } else if (inquirerResponse.movieChoice) {
+    getMovie();
+  } else {
+    getConcert();
+  }
+});
 
-
-  userInput(userChoice,searchParameter);
+userInput(userChoice, searchParameter);
