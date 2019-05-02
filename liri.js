@@ -103,7 +103,7 @@ var options = [
   }
 ];
 
-inquirer.prompt(options).then(function answers() {
+inquirer.prompt(options).then(function answers(){
   switch (answers.choices) {
     case "Spotify":
       getSpotify(answers.songChoice);
