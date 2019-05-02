@@ -81,7 +81,7 @@ var options = [
     type: "input",
     message: "What song would you like to find information about?",
     name: "songChoice",
-    when: function (answers){
+    when: function(answers) {
       return answers.choices == "Songs";
     }
   },
@@ -89,25 +89,35 @@ var options = [
     type: "input",
     message: "What movie would you like to find information about?",
     name: "movieChoice",
-    when: function (answers){
-      return answers.choices =="Movies";
+    when: function(answers) {
+      return answers.choices == "Movies";
     }
   },
   {
     type: "input",
     message: "What band would you like to find information about?",
     name: "bandChoice",
-    when: function (answers){
-      return answers.choices =="Concerts"
+    when: function(answers) {
+      return answers.choices == "Concerts";
     }
   }
 ];
 
-
-inquirer
-.prompt(options)
-.then(function answers{
-  switch (answers.choices){
-    case 
+inquirer.prompt(options).then(function answers() {
+  switch (answers.choices) {
+    case "Spotify":
+      getSpotify(answers.songChoice);
+      break;
+    case "OMDB":
+      getMovie(answers.movieChoice);
+      break;
+    case "Get Concert":
+      getConcert(answers.bandChoice);
+      break;
+    case "Run Command":
+      initiateCommand;
+      break;
+    default:
+      console.log("Command Unknown");
   }
-}
+});
