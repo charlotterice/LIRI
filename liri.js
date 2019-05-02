@@ -6,14 +6,14 @@ var request = require("request");
 var inquirer = require("inquirer");
 var spotify = new Spotify(keys.spotify);
 
-var userChoice = process.argv[2];
-var searchParameter = process.argv[3];
+// var userChoice = process.argv[2];
+// var searchParameter = process.argv[3];
 
-function userInput(userOption, inputParameter) {
-  switch (userOption) {
-    case "concert-this":
-  }
-}
+// function userInput(userOption, inputParameter) {
+//   switch (userOption) {
+//     case "concert-this":
+//   }
+// }
 function getSpotify(song) {
   spotify.search({ type: "track", query: song }, function(err, data) {
     if (err) {
@@ -65,7 +65,7 @@ function getConcert(bandQuery) {
     }
   });
 }
-function doWhatItSays() {
+function initiateCommand() {
   fs.readFile("random.txt", "utf-8", function(error, data) {
     getSpotify(data);
   });
@@ -80,27 +80,34 @@ var options = [
   {
     type: "input",
     message: "What song would you like to find information about?",
-    name: "songChoice"
+    name: "songChoice",
+    when: function (answers){
+      return answers.choices == "Songs";
+    }
   },
   {
     type: "input",
     message: "What movie would you like to find information about?",
-    name: "movieChoice"
+    name: "movieChoice",
+    when: function (answers){
+      return answers.choices =="Movies";
+    }
   },
   {
     type: "input",
     message: "What band would you like to find information about?",
-    name: "bandChoice"
+    name: "bandChoice",
+    when: function (answers){
+      return answers.choices =="Concerts"
+    }
   }
 ];
-inquirer.prompt([]).then(function(inquirerResponse) {
-  if (inquirerResponse.songChoice) {
-    getSpotify();
-  } else if (inquirerResponse.movieChoice) {
-    getMovie();
-  } else {
-    getConcert();
-  }
-});
 
-userInput(userChoice, searchParameter);
+
+inquirer
+.prompt(options)
+.then(function answers{
+  switch (answers.choices){
+    case 
+  }
+}
