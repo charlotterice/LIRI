@@ -4,7 +4,6 @@ var fs = require("fs");
 var Spotify = require("node-spotify-api");
 var request = require("request");
 var inquirer = require("inquirer");
-var spotify = new Spotify(keys.spotify);
 
 // var userChoice = process.argv[2];
 // var searchParameter = process.argv[3];
@@ -15,12 +14,13 @@ var spotify = new Spotify(keys.spotify);
 //   }
 // }
 function getSpotify(song) {
+  var spotify = new Spotify(keys.spotify);
   spotify.search({ type: "track", query: song }, function(err, data) {
     if (err) {
       console.log("Error: " + err);
       return;
     } else {
-      output = "==============LIRI RESULTS===================";
+      output = "==============LIRI RESULTS==================="+
       song +
         data.tracks.items[0].album.name +
         data.tracks.items[0].album.artists[0].name +
@@ -32,10 +32,11 @@ function getSpotify(song) {
 
 function getMovie(movie) {
   var OMDB =
-    "http://www.omdbapi.com/?t=" + movieName + "&y=&plot=short&apikey=87e19896";
+    "http://www.omdbapi.com/?t=" + movie + "&y=&plot=short&apikey=87e19896";
   request(OMDB, function(err, res, body) {
     if (err) {
       console.log("Error: " + err);
+      return;
     } else {
       var movieData = JSON.parse(body);
       output =
@@ -58,7 +59,7 @@ function getConcert(bandQuery) {
     "https://rest.bandsintown.com/artists/" +
     bandQuery +
     "/events?app_id=codingbootcamp#";
-  request(bandInTown, function(err, res, body) {
+  request(bandsInTown, function(err, res, body) {
     if (!err && res.statusCode === 200) {
       var concert = JSON.parse(body);
       console.log(concert[0].venue.city + concert[0].venue.country);
@@ -66,7 +67,7 @@ function getConcert(bandQuery) {
   });
 }
 function initiateCommand() {
-  fs.readFile("random.txt", "utf-8", function(error, data) {
+  fs.readFile("random.txt", "utf-8", function(err, data) {
     getSpotify(data);
   });
 }
@@ -103,7 +104,8 @@ var options = [
   }
 ];
 
-inquirer.prompt(options).then(function answers(){
+inquirer.prompt(options)
+.then(function(answers){
   switch (answers.choices) {
     case "Spotify":
       getSpotify(answers.songChoice);
