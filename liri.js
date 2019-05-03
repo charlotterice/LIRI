@@ -30,7 +30,7 @@ function getSpotify(song) {
   });
 }
 
-function getMovie(movie) {
+var getMovie = function(movie){
   var OMDB =
     "http://www.omdbapi.com/?t=" + movie + "&y=&plot=short&apikey=87e19896";
   request(OMDB, function(err, res, body) {
@@ -52,20 +52,20 @@ function getMovie(movie) {
       console.log(output);
     }
   });
-}
+};
 
-function getConcert(bandQuery) {
-  var bandsInTown =
-    "https://rest.bandsintown.com/artists/" +
-    bandQuery +
-    "/events?app_id=codingbootcamp#";
-  request(bandsInTown, function(err, res, body) {
-    if (!err && res.statusCode === 200) {
-      var concert = JSON.parse(body);
-      console.log(concert[0].venue.city + concert[0].venue.country);
-    }
-  });
-}
+// function getConcert(bandQuery) {
+//   var bandsInTown =
+//     "https://rest.bandsintown.com/artists/" +
+//     bandQuery +
+//     "/events?app_id=codingbootcamp#";
+//   request(bandsInTown, function(err, res, body) {
+//     if (!err && res.statusCode === 200) {
+//       var concert = JSON.parse(body);
+//       console.log(concert[0].venue.city + concert[0].venue.country);
+//     }
+//   });
+// }
 function initiateCommand() {
   fs.readFile("random.txt", "utf-8", function(err, data) {
     getSpotify(data);
@@ -76,14 +76,14 @@ var options = [
     type: "list",
     message: "Which would you like to search?",
     choices: ["Songs", "Movies", "Concerts"],
-    name: "choices"
+    name: "programs"
   },
   {
     type: "input",
     message: "What song would you like to find information about?",
     name: "songChoice",
     when: function(answers) {
-      return answers.choices == "Songs";
+      return answers.programs == "Songs";
     }
   },
   {
@@ -91,7 +91,7 @@ var options = [
     message: "What movie would you like to find information about?",
     name: "movieChoice",
     when: function(answers) {
-      return answers.choices == "Movies";
+      return answers.programs == "Movies";
     }
   },
   {
@@ -99,14 +99,14 @@ var options = [
     message: "What band would you like to find information about?",
     name: "bandChoice",
     when: function(answers) {
-      return answers.choices == "Concerts";
+      return answers.programs == "Concerts";
     }
   }
 ];
 
 inquirer.prompt(options)
 .then(function(answers){
-  switch (answers.choices) {
+  switch (answers.programs) {
     case "Spotify":
       getSpotify(answers.songChoice);
       break;
@@ -117,7 +117,7 @@ inquirer.prompt(options)
       getConcert(answers.bandChoice);
       break;
     case "Run Command":
-      initiateCommand;
+      initiateCommand();
       break;
     default:
       console.log("Command Unknown");
