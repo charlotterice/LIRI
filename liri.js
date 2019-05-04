@@ -4,7 +4,7 @@ var fs = require("fs");
 var Spotify = require("node-spotify-api");
 var request = require("request");
 var inquirer = require("inquirer");
-
+var space = "\n" + "\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0";
 // var userChoice = process.argv[2];
 // var searchParameter = process.argv[3];
 
@@ -20,17 +20,25 @@ function getSpotify(song) {
       console.log("Error: " + err);
       return;
     } else {
-      output = "==============LIRI RESULTS==================="+
-      song +
+      output =
+        "==============LIRI RESULTS===================" +
+        space +
+        "Song Name: " + song +
+        space +
+        "Album Name: " +
         data.tracks.items[0].album.name +
+        space +
+        "Artist Name: " +
         data.tracks.items[0].album.artists[0].name +
+        space +
+        "Link to Song: " +
         data.tracks.items[0].album.external_urls.spotify;
       console.log(output);
     }
   });
 }
 
-var getMovie = function(movie){
+var getMovie = function(movie) {
   var OMDB =
     "http://www.omdbapi.com/?t=" + movie + "&y=&plot=short&apikey=87e19896";
   request(OMDB, function(err, res, body) {
@@ -48,7 +56,7 @@ var getMovie = function(movie){
         movieData.Language +
         movieData.Plot +
         movieData.Actors +
-        movieData.Ratings[1].Value;
+        movieData.Ratings[0].Value;
       console.log(output);
     }
   });
@@ -105,13 +113,12 @@ var options = [
   // }
 ];
 
-inquirer.prompt(options)
-.then(function(answers){
+inquirer.prompt(options).then(function(answers) {
   switch (answers.programs) {
     case "Songs":
       getSpotify(answers.songChoice);
       break;
-    case "OMDB":
+    case "Movies":
       getMovie(answers.movieChoice);
       break;
     case "Get Concert":
