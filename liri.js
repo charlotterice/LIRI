@@ -93,21 +93,22 @@ var options = [
     when: function(answers) {
       return answers.programs == "Movies";
     }
-  },
-  {
-    type: "input",
-    message: "What band would you like to find information about?",
-    name: "bandChoice",
-    when: function(answers) {
-      return answers.programs == "Concerts";
-    }
   }
+  // ,
+  // {
+  //   type: "input",
+  //   message: "What band would you like to find information about?",
+  //   name: "bandChoice",
+  //   when: function(answers) {
+  //     return answers.programs == "Concerts";
+  //   }
+  // }
 ];
 
 inquirer.prompt(options)
 .then(function(answers){
   switch (answers.programs) {
-    case "Spotify":
+    case "Songs":
       getSpotify(answers.songChoice);
       break;
     case "OMDB":
