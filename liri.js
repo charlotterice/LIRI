@@ -65,27 +65,30 @@ var getMovie = function(movie) {
   });
 };
 
-function getConcert(bandQuery) {
+var getConcert = function (bandQuery) {
   var bandsInTown =
     "https://rest.bandsintown.com/artists/" +
     bandQuery +
-    "/events?app_id=codingbootcamp#";
+    "/events?app_id=trilogy";
 
   request(bandsInTown, function(err, res, body) {
-    if (!err && res.statusCode === 200) {
+    if (err){
+      console.log("Error: "+err);
+      return
+    }else{
       var momentDT = moment().format("L");
       var concert = JSON.parse(body);
-      console.log(
-        "Venue Name: " +
-          concert[0].venue.name + space +
+      output= "==============LIRI CONCERT RESULTS===================" + space +
+        "Venue Name: " + concert.name
+          concert[0].name + space +
           "Venue Location: " +
           concert[0].venue.city +
           concert[0].venue.country + space +
-          "Event Date: "+ momentDT
-      ) 
+          "Event Date: "+ momentDT;
+          console.log(output); 
     }
   });
-}
+};
 function initiateCommand() {
   fs.readFile("random.txt", "utf-8", function(err, data) {
     getSpotify(data);
