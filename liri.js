@@ -5,14 +5,7 @@ var Spotify = require("node-spotify-api");
 var request = require("request");
 var inquirer = require("inquirer");
 var space = "\n" + "\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0";
-// var userChoice = process.argv[2];
-// var searchParameter = process.argv[3];
 
-// function userInput(userOption, inputParameter) {
-//   switch (userOption) {
-//     case "concert-this":
-//   }
-// }
 function getSpotify(song) {
   var spotify = new Spotify(keys.spotify);
   spotify.search({ type: "track", query: song }, function(err, data) {
@@ -21,7 +14,7 @@ function getSpotify(song) {
       return;
     } else {
       output =
-        "==============LIRI RESULTS===================" +
+        "==============LIRI SONG RESULTS===================" +
         space +
         "Song Name: " + song +
         space +
@@ -48,15 +41,17 @@ var getMovie = function(movie) {
     } else {
       var movieData = JSON.parse(body);
       output =
-        movieData.Title +
-        movieData.Year +
-        movieData.Rated +
-        movieData.imdbRating +
-        movieData.Country +
-        movieData.Language +
-        movieData.Plot +
-        movieData.Actors +
-        movieData.Ratings[0].Value;
+      "==============LIRI MOVIE RESULTS===================" +
+      space + 
+      "Movie Title: " + movieData.Title +
+      space +
+      "Movie Release Year: " + movieData.Year +
+      space +
+      "Movie Rating: " + movieData.Rated +
+      space +
+      "Movie Language: " + movieData.Language +
+      space +
+      "Movie Summary: " + movieData.Plot 
       console.log(output);
     }
   });
@@ -121,7 +116,7 @@ inquirer.prompt(options).then(function(answers) {
     case "Movies":
       getMovie(answers.movieChoice);
       break;
-    case "Get Concert":
+    case "Concerts":
       getConcert(answers.bandChoice);
       break;
     case "Run Command":
