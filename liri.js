@@ -4,6 +4,8 @@ var fs = require("fs");
 var Spotify = require("node-spotify-api");
 var request = require("request");
 var inquirer = require("inquirer");
+var moment = require("moment");
+moment().format();
 var space = "\n" + "\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0";
 
 function getSpotify(song) {
@@ -16,7 +18,8 @@ function getSpotify(song) {
       output =
         "==============LIRI SONG RESULTS===================" +
         space +
-        "Song Name: " + song +
+        "Song Name: " +
+        song +
         space +
         "Album Name: " +
         data.tracks.items[0].album.name +
@@ -41,34 +44,48 @@ var getMovie = function(movie) {
     } else {
       var movieData = JSON.parse(body);
       output =
-      "==============LIRI MOVIE RESULTS===================" +
-      space + 
-      "Movie Title: " + movieData.Title +
-      space +
-      "Movie Release Year: " + movieData.Year +
-      space +
-      "Movie Rating: " + movieData.Rated +
-      space +
-      "Movie Language: " + movieData.Language +
-      space +
-      "Movie Summary: " + movieData.Plot 
+        "==============LIRI MOVIE RESULTS===================" +
+        space +
+        "Movie Title: " +
+        movieData.Title +
+        space +
+        "Movie Release Year: " +
+        movieData.Year +
+        space +
+        "Movie Rating: " +
+        movieData.Rated +
+        space +
+        "Movie Language: " +
+        movieData.Language +
+        space +
+        "Movie Summary: " +
+        movieData.Plot;
       console.log(output);
     }
   });
 };
 
-// function getConcert(bandQuery) {
-//   var bandsInTown =
-//     "https://rest.bandsintown.com/artists/" +
-//     bandQuery +
-//     "/events?app_id=codingbootcamp#";
-//   request(bandsInTown, function(err, res, body) {
-//     if (!err && res.statusCode === 200) {
-//       var concert = JSON.parse(body);
-//       console.log(concert[0].venue.city + concert[0].venue.country);
-//     }
-//   });
-// }
+function getConcert(bandQuery) {
+  var bandsInTown =
+    "https://rest.bandsintown.com/artists/" +
+    bandQuery +
+    "/events?app_id=codingbootcamp#";
+
+  request(bandsInTown, function(err, res, body) {
+    if (!err && res.statusCode === 200) {
+      var momentDT = moment().format("L");
+      var concert = JSON.parse(body);
+      console.log(
+        "Venue Name: " +
+          concert[0].venue.name + space +
+          "Venue Location: " +
+          concert[0].venue.city +
+          concert[0].venue.country + space +
+          "Event Date: "+ momentDT
+      ) 
+    }
+  });
+}
 function initiateCommand() {
   fs.readFile("random.txt", "utf-8", function(err, data) {
     getSpotify(data);
@@ -96,16 +113,15 @@ var options = [
     when: function(answers) {
       return answers.programs == "Movies";
     }
+  },
+  {
+    type: "input",
+    message: "What band would you like to find information about?",
+    name: "bandChoice",
+    when: function(answers) {
+      return answers.programs == "Concerts";
+    }
   }
-  // ,
-  // {
-  //   type: "input",
-  //   message: "What band would you like to find information about?",
-  //   name: "bandChoice",
-  //   when: function(answers) {
-  //     return answers.programs == "Concerts";
-  //   }
-  // }
 ];
 
 inquirer.prompt(options).then(function(answers) {
